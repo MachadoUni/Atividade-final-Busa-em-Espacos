@@ -25,19 +25,69 @@ class State:
         return self.tiles.index(0)
 
     def neighbors(self) -> List["State"]:
-        """Retorna os estados filhos válidos a partir deste estado."""
-        # TODO: implemente a geração de estados filhos
-        raise NotImplementedError
+        neighbors = []
+
+        blank = self.blank_index
+
+        linha = blank // 3
+        coluna = blank % 3
+
+        moves = [
+            ("UP", -3),
+            ("DOWN", 3),
+            ("LEFT", -1),
+            ("RIGHT", 1)
+        ]
+
+        for action, offset in moves:
+            new_blank = blank + offset
+
+            if new_blank < 0 or new_blank >= 9:
+                continue
+
+            if action == "LEFT" and coluna == 0:
+                continue
+
+            if action == "RIGHT" and coluna == 2:
+                continue
+
+            new_tiles = list(self.tiles)
+
+            new_tiles[blank], new_tiles[new_blank] = (
+                new_tiles[new_blank],
+                new_tiles[blank]
+            )
+
+            new_state = State(
+                tiles=tuple(new_tiles),
+                parent=self,
+                action=action,
+                cost=self.cost + 1
+            )
+
+            neighbors.append(new_state)
+
+        return neighbors
 
     def path(self) -> List["State"]:
-        """Retorna a sequência de estados do estado inicial até este."""
-        # TODO: implemente a reconstrução do caminho usando self.parent
-        raise NotImplementedError
+        path = []
+
+        current = self
+
+        while current is not None:
+            path.append(current)
+            current = current.parent
+
+        path.reverse()
+
+        return path
 
     def actions(self) -> List[str]:
-        """Retorna a sequência de ações do estado inicial até este."""
-        # TODO: implemente usando path()
-        raise NotImplementedError
+        return [
+            state.action
+            for state in self.path()
+            if state.action is not None
+        ]
 
     def __eq__(self, other: object) -> bool:
         return isinstance(other, State) and self.tiles == other.tiles

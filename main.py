@@ -21,7 +21,9 @@ def print_result(name: str, result):
 
 
 if __name__ == "__main__":
-    initial = State((2, 8, 3, 1, 6, 4, 7, 0, 5))   # ~20 movimentos até a solução
+    #initial = State((2, 8, 3, 1, 6, 4, 7, 0, 5))   # Aparentemente, não é solucionável em 20 movimentos (como dizia o comentário anterior)
+    #initial = State((1, 2, 3, 4, 5, 6, 7, 0, 8))   # Solucionável em 1
+    initial = State((2, 3, 6, 1, 5, 0, 4, 7, 8))
 
     print("Estado inicial:")
     print(initial)
